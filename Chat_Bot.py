@@ -8,6 +8,7 @@ from DB_keyboard import *
 
 TOKEN = '488534319:AAG-mAJxomYbuFwqfVNBMv2vVAP4aLd6SOM'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
+    
 
 def get_updates(offset=None):
     url = URL + "getUpdates"
@@ -30,6 +31,7 @@ def send_message(text,chat_id,keyboard = None):
     if keyboard:
         url += "&reply_markup={}".format(keyboard)
     requests.get(url)
+
 
 def send_result(information,chat_id):
     if information['Service'] == 'Search image':
@@ -58,11 +60,11 @@ def Initialize():
         requests.get(url)
 
 
-def State_handler(machine, updates, information):
+def State_handler(machine, update, information):
     STATE = machine.state
-    for update in updates["result"]:
-        text = update["message"]["text"]
-        chat_id = update["message"]["chat"]["id"]
+    text = update["message"]["text"]
+    chat_id = update["message"]["chat"]["id"]
+
 
     if STATE == 'Set_service':
         if text == "/start":
@@ -86,10 +88,12 @@ def State_handler(machine, updates, information):
             send_message("No such command,use \"/start\" to start",chat_id)
             return
         send_message("Please select element of the character",chat_id,Element_keyboard)
-    elif STATE == 'Set_language':
-        {}
+
     elif STATE == 'Set_element':
-        if text in Element_list:
+        if text == 'Back':
+            machine.Reset()
+            send_message("Welcome,please choose the service",chat_id,Service_keyboard)
+        elif text in Element_list:
             information['Element'] = text
             machine.Element_OK()
             send_message("Please select character",chat_id,Character_keyboard[information['Element']])
@@ -97,7 +101,13 @@ def State_handler(machine, updates, information):
             send_message("Please select element of the character",chat_id,Element_keyboard)
 
     elif STATE == 'Set_character':
-        if text in Character_list:
+        if text == 'Reset':
+            machine.Reset()
+            send_message("Welcome,please choose the service",chat_id,Service_keyboard)
+        elif text == 'Back':
+            machine.Element_REDO()
+            send_message("Please select element of the character",chat_id,Element_keyboard)
+        elif text in Character_list:
             information['Character']=text
             machine.Character_OK()
             if information['Service'] == 'Search image':
@@ -110,22 +120,37 @@ def State_handler(machine, updates, information):
             send_message("Please select character",chat_id,Character_keyboard[information['Element']])
 
     elif STATE == 'Set_level':
-        information['Level'] = text
-        machine.Level_OK()
-        send_result(information,chat_id)
-        send_message("Finished. Use \"/start\" for next search.",chat_id)
+        if text == 'Reset':
+            machine.Reset()
+            send_message("Welcome,please choose the service",chat_id,Service_keyboard)
+        elif text == 'Back':
+            machine.Character_REDO()
+            send_message("Please select character",chat_id,Character_keyboard[information['Element']])
+        else:
+            information['Level'] = text
+            machine.Level_OK()
+            send_result(information,chat_id)
+            send_message("Finished. Use \"/start\" for next search.",chat_id)
         
-
-def main():
+class Data:
     machine = StateMachine(states = states, transitions = transitions, initial = 'Set_service')
     information = {'Service': 'None', 'Element': 'None', 'Character': 'None', 'Level': 'None'}
+
+
+def main():
+    UserDict = {}
     last_update_id = None
 
     while True:
         updates = get_updates(last_update_id)
         if len(updates["result"]) > 0:
+            for update in updates["result"]:
+                chat_id = update["message"]["chat"]["id"]
+                if chat_id not in UserDict:
+                    UserDict[chat_id] = Data()
+                print(chat_id)
+                State_handler(UserDict[chat_id].machine, update, UserDict[chat_id].information)
             last_update_id = get_last_update_id(updates) + 1
-            State_handler(machine, updates, information)
         time.sleep(0.5)
 
 

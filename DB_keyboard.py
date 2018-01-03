@@ -1,6 +1,6 @@
-Service_keyboard = "{\"one_time_keyboard\": true, \"keyboard\": [[\"Search image\"], [\"Search wiki\"], [\"Search gamewith\"], [\"Select language\"]]}"
+Service_keyboard = "{\"one_time_keyboard\": true, \"keyboard\": [[\"Search image\"], [\"Search wiki\"], [\"Search gamewith\"]]}"
 
-Element_keyboard = "{\"one_time_keyboard\": true, \"keyboard\": [[\"Fire\"], [\"Water\"], [\"Earth\"], [\"Wind\"], [\"Light\"], [\"Dark\"], [\"Reset\"]]}"
+Element_keyboard = "{\"one_time_keyboard\": true, \"keyboard\": [[\"Fire\"], [\"Water\"], [\"Earth\"], [\"Wind\"], [\"Light\"], [\"Dark\"], [\"Back\"]]}"
 
 Character_keyboard = {
     'Fire':  "{\"one_time_keyboard\": true, \"keyboard\": [[\"Reset\"], [\"Back\"], [\"Anila\"]]}",
@@ -11,7 +11,7 @@ Character_keyboard = {
     'Dark':  "{\"one_time_keyboard\": true, \"keyboard\": [[\"Reset\"], [\"Back\"], [\"\"]]}"
 }
 
-Level_keyboard = "{\"one_time_keyboard\": true, \"keyboard\": [[\"%E2%98%85+1\"], [\"%E2%98%85+3\"]]}"
+Level_keyboard = "{\"one_time_keyboard\": true, \"keyboard\": [[\"Reset\"], [\"Back\"], [[\"%E2%98%85+1\"], [\"%E2%98%85+3\"]]}"
 
 Element_list = ['Fire', 'Water', 'Earth', 'Wind', 'Light', 'Dark']
 

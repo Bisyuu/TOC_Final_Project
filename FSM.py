@@ -6,7 +6,6 @@ class StateMachine(Machine):
 
 states = [
     {'name': 'Set_service'},
-    {'name': 'Set_language'},
     {'name': 'Search_image'},
     {'name': 'Search_wiki'},
     {'name': 'Search_gamewith'},
@@ -16,8 +15,6 @@ states = [
 ]
 
 transitions = [
-    ['Select_language','Set_service','Set_language'],
-    ['Language_OK','Set_language','Set_service'],
     ['Image_set','Set_service','Search_image'],
     ['Wiki_set','Set_service','Search_wiki'],
     ['Gamewith_set','Set_service','Search_gamewith'],
