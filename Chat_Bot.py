@@ -68,7 +68,7 @@ def State_handler(machine, update, information):
 
     if STATE == 'Set_service':
         if text == "/start":
-            send_message("Welcome",chat_id,Service_keyboard)
+            send_message("Welcome,please choose the service",chat_id,Service_keyboard)
             return
         elif text == 'Select language':
             machine.Select_language()
